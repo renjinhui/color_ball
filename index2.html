@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>珠峰培训</title>
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+        canvas{
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id='canvas' width="1000" height="600"></canvas>  
+</body>
+</html>
+<script>
+    let canvas = document.getElementById('canvas');
+    //创建一个用于再画布上画图的环境；
+    let ctx = canvas.getContext('2d');
+
+    //在画布上画一个圆
+    ctx.beginPath(); // 新建一条路径
+    ctx.arc(500,300,100,0,Math.PI*2); // 定义圆的路径 
+    // ctx.stroke(); // 绘制 定义的路径
+    ctx.fillStyle = 'red'; //规定填充圆的颜色
+    ctx.fill(); // 用规定的颜色填充 圆
+    // 画一个圆 需要 圆心位置 半径 和填充颜色
+
+
+    //去创造一个类，这个类用来创造不同圆
+    function Circle(x,y,r){
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.dx = Math.random()*10 -5;
+        this.dy = Math.random()*10 -5;
+        this.color = `rgb(${Math.floor(Math.random()*250)},${Math.floor(Math.random()*250)},203)`;
+        ary.push(this);
+    }
+    Circle.prototype.render = function () {
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.r,0,2*Math.PI);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+    Circle.prototype.update = function () {
+        this.x += this.dx;
+        this.y += this.dy;
+        this.r--;
+        if(this.r <=0){
+            let that = this;
+            ary = ary.filter((item)=>{
+                return item != that
+            })
+            return false
+        }
+        return true;
+    }
+    var ary = [];
+    canvas.onmousemove = function (e) {
+        new Circle(e.clientX,e.clientY,30)
+    }
+    setInterval(function () {
+        ctx.clearRect(0,0,1000,600);
+        ary.forEach((item)=>{
+            item.update() && item.render();
+        })
+    },20)
+</script>
